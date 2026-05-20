@@ -84,7 +84,21 @@ def plot_results(losses, y_true, y_pred, attn_weights, xgb_model):
     plt.savefig('results/attention_weights.png')
     plt.close()
 
-    print("\n[INFO] Đã lưu các biểu đồ phân tích học thuật tại thư mục 'results/'.")
+    # 4. Plot XGBoost Feature Importance (Hình 7 trong bài báo)
+    plt.figure(figsize=(8, 5))
+    feature_names = ['DL Prediction', 'Temp', 'Humid', 'WindSpeed', 'WindDir', 'Weather']
+    importances = xgb_model.model.feature_importances_
+    indices = np.argsort(importances)
+    plt.barh(range(len(indices)), importances[indices], color='teal')
+    plt.yticks(range(len(indices)), [feature_names[i] for i in indices])
+    plt.title('XGBoost Feature Importance')
+    plt.xlabel('Importance Score')
+    plt.grid(axis='x')
+    plt.tight_layout()
+    plt.savefig('results/feature_importance.png')
+    plt.close()
+
+    print("\n[INFO] Đã lưu 4 biểu đồ phân tích tại thư mục 'results/'.")
 
 def main():
     print("="*50)
