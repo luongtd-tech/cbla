@@ -62,7 +62,7 @@ Sau khi chạy `train.py` hoặc bấm "Bắt đầu Huấn luyện" trên Web, 
 | `attention_weights.png` | Phân bổ trọng số Attention trong 24 giờ quá khứ | Mục 3.3.3 |
 | `feature_importance.png` | Mức độ ảnh hưởng các yếu tố khí tượng (XGBoost) | Hình 7 |
 
-## 🔧 Siêu Tham Số Mặc Định (Theo Bảng 3 - Bài báo)
+## Siêu tham số mặc định (Theo Bảng 3 - Bài báo)
 | Tham số | Giá trị |
 | :--- | :--- |
 | Time Steps (Cửa sổ trượt) | 24 giờ |
@@ -77,4 +77,4 @@ Sau khi chạy `train.py` hoặc bấm "Bắt đầu Huấn luyện" trên Web, 
 | Loss Function | MAE (L1Loss) |
 
 ---
-*Phát triển và tối ưu cho mục đích nghiên cứu khoa học & đồ án môn học - luongtd.tech@gmail.comcom.*
+*Phát triển và tối ưu cho mục đích nghiên cứu khoa học - luongtd.tech@gmail.com.*
