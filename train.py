@@ -98,24 +98,24 @@ def plot_results(losses, y_true, y_pred, attn_weights, xgb_model):
     plt.savefig('results/feature_importance.png')
     plt.close()
 
-    print("\n[INFO] Đã lưu 4 biểu đồ phân tích tại thư mục 'results/'.")
+    print("\n[INFO] Da luu 4 bieu do phan tich tai thu muc 'results/'.")
 
 def main():
     print("="*50)
-    print(" BẮT ĐẦU HUẤN LUYỆN MÔ HÌNH LAI CBLA (HỌC SÂU + XGBOOST)")
+    print(" BAT DAU HUAN LUYEN MO HINH LAI CBLA (HOC SAU +XGBOOST)")
     print("="*50)
     
-    print("\n--- 1. Tiền xử lý dữ liệu (KNN Imputer & Sliding Windows) ---")
+    print("\n--- 1. Tien xu ly du lieu (KNN Imputer & Sliding Windows) ---")
     train_loader, test_loader, train_loader_unshuffled, scaler, X_train, y_train, X_test, y_test = preprocess_data(
         csv_path="data/beijing_air_quality_2014.csv", time_steps=24
     )
-    print(f"Số mẫu Huấn luyện (Train): {len(X_train)} | Số mẫu Kiểm thử (Test): {len(X_test)}")
+    print(f"So mau huan luyen (Train): {len(X_train)} | So mau kiem thu (Test): {len(X_test)}")
     
-    print("\n--- 2. Huấn luyện Khối Deep Learning (1D-CNN + BiLSTM + Attention) ---")
+    print("\n--- 2. Huan luyen khoi Deep Learning (1D-CNN + BiLSTM + Attention) ---")
     dl_model = CBLA_DL_Model(input_nodes=11, time_steps=24)
     losses = train_dl_model(dl_model, train_loader, epochs=100, lr=0.001)
     
-    print("\n--- 3. Trích xuất đặc trưng & Dự báo sơ bộ ---")
+    print("\n--- 3. Trich xuat dac trung va du bao so bo ---")
     train_dl_preds, _, _ = get_dl_predictions(dl_model, train_loader_unshuffled)
     test_dl_preds, _, test_attentions = get_dl_predictions(dl_model, test_loader)
     
@@ -128,27 +128,27 @@ def main():
     X_train_xgb = xgb_wrapper.prepare_features(train_dl_preds, train_met_features)
     X_test_xgb = xgb_wrapper.prepare_features(test_dl_preds, test_met_features)
     
-    print("\n--- 4. Huấn luyện Mô hình thứ cấp XGBoost ---")
+    print("\n--- 4. Huan luyen mo hinh thu cap XGBoost ---")
     xgb_wrapper.fit(X_train_xgb, y_train)
     print("Huấn luyện XGBoost hoàn tất.")
     
-    print("\n--- 5. Đánh giá Chỉ số Mô hình (Evaluation) ---")
+    print("\n--- 5. Danh gia chi so mo hinh (Evaluation) ---")
     dl_metrics = evaluate_metrics(y_test, test_dl_preds)
-    print_evaluation(dl_metrics, "Deep Learning Độc Lập (CNN-BiLSTM-Attention)")
+    print_evaluation(dl_metrics, "Deep Learning doc lap (CNN-BiLSTM-Attention)")
     
     final_preds = xgb_wrapper.predict(X_test_xgb)
     cbla_metrics = evaluate_metrics(y_test, final_preds)
-    print_evaluation(cbla_metrics, "Toàn bộ Mô Hình Lai CBLA (Hybrid)")
+    print_evaluation(cbla_metrics, "Toan bo mo hinh lai CBLA (Hybrid)")
     
-    print("\n--- 6. Xuất Biểu đồ và Lưu Trọng số ---")
+    print("\n--- 6. Xuat bieu do va luu trong so---")
     plot_results(losses, y_test, final_preds, test_attentions, xgb_wrapper)
     
     # Save models
     os.makedirs("saved_models", exist_ok=True)
     torch.save(dl_model.state_dict(), "saved_models/cbla_dl_weights.pth")
     xgb_wrapper.model.save_model("saved_models/cbla_xgboost.json")
-    print("[INFO] Đã lưu trọng số mô hình tại thư mục 'saved_models/'.")
-    print("\nHoàn tất toàn bộ quy trình! Mô hình đã sẵn sàng cho đồ án nghiên cứu.")
+    print("[INFO] Da luu trong so mo hinh tai thu muc 'saved_models/'.")
+    print("\nHoan tat toan bo quy trinh. Mo hinh da san sang.")
 
 if __name__ == "__main__":
     main()
