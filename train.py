@@ -102,7 +102,7 @@ def plot_results(losses, y_true, y_pred, attn_weights, xgb_model):
 
 def main():
     print("="*50)
-    print(" BAT DAU HUAN LUYEN MO HINH LAI CBLA (HOC SAU +XGBOOST)")
+    print(" BAT DAU HUAN LUYEN MO HINH LAI CBLA (HOC SAU + XGBOOST)")
     print("="*50)
     
     print("\n--- 1. Tien xu ly du lieu (KNN Imputer & Sliding Windows) ---")
